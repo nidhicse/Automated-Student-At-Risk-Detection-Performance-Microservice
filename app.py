@@ -36,6 +36,11 @@ with st.form("prediction_form"):
     
     submitted = st.form_submit_button("Predict Risk")
 
+# Cache the heavy ML models so they only load once, saving massive amounts of CPU!
+@st.cache_resource
+def get_pipeline():
+    return PredictPipeline()
+
 if submitted:
     with st.spinner("Analyzing student profile and calculating SHAP values..."):
         try:
@@ -53,8 +58,8 @@ if submitted:
             
             pred_df = data.get_data_as_data_frame()
             
-            # Predict
-            pipeline = PredictPipeline()
+            # Predict using the cached pipeline
+            pipeline = get_pipeline()
             results = pipeline.predict(pred_df)
             
             probability = results["at_risk_probability"]

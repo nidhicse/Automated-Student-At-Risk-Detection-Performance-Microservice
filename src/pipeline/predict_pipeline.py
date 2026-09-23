@@ -14,28 +14,26 @@ from src.components.model_trainer import EnsemblePredictWrapper
 
 class PredictPipeline:
     def __init__(self):
-        pass
+        model_path = os.path.join("artifacts", "model.pkl")
+        preprocessor_path = os.path.join("artifacts", "preprocessor.pkl")
+        explainer_path = os.path.join("artifacts", "shap_explainer.pkl")
+        
+        # Load artifacts once upon initialization
+        self.model = load_object(file_path=model_path)
+        self.preprocessor = load_object(file_path=preprocessor_path)
+        self.explainer = load_object(file_path=explainer_path)
 
     def predict(self, features):
         try:
-            model_path = os.path.join("artifacts", "model.pkl")
-            preprocessor_path = os.path.join("artifacts", "preprocessor.pkl")
-            explainer_path = os.path.join("artifacts", "shap_explainer.pkl")
-            
-            # Load artifacts
-            model = load_object(file_path=model_path)
-            preprocessor = load_object(file_path=preprocessor_path)
-            explainer = load_object(file_path=explainer_path)
-            
             # Apply transformation
-            data_scaled = preprocessor.transform(features)
+            data_scaled = self.preprocessor.transform(features)
             
             # Predict the probability using the ensemble model
-            probability = float(model.predict_proba(data_scaled)[0, 1])
+            probability = float(self.model.predict_proba(data_scaled)[0, 1])
             
             # Calculate SHAP values
-            shap_values = explainer.shap_values(data_scaled)
-            feature_names = preprocessor.get_feature_names_out()
+            shap_values = self.explainer.shap_values(data_scaled)
+            feature_names = self.preprocessor.get_feature_names_out()
             
             if isinstance(shap_values, list):
                 instance_shap = shap_values[1][0]
