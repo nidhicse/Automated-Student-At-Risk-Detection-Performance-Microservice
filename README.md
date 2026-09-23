@@ -60,5 +60,8 @@ This project is fully configured to be deployed for free natively on **Streamlit
 
 1. Push this repository to GitHub.
 2. Go to [Streamlit Community Cloud](https://share.streamlit.io/) and log in with your GitHub account.
-3. Click **New app**, select your repository, set the main file path to `app.py`, and click **Deploy**!
-4. Streamlit will automatically read your `requirements.txt` and host the application for you.
+3. Click **New app**. You will be asked to fill out a form:
+   - **Repository:** Select your repository from the dropdown.
+   - **Branch:** Select `main` (or `master`).
+   - **Main file path:** Type exactly `app.py` (or paste the full URL: `https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/blob/main/app.py`).
+4. Click **Deploy**! Streamlit will automatically read your `requirements.txt` and host the application.
